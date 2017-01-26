@@ -1,0 +1,2 @@
+# gameRobot
+auto play game
