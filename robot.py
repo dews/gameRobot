@@ -8,14 +8,17 @@ import matchImage
 import screenshot
 
 try:
-    sys.path.insert(0, os.path.join(os.environ['ANDROID_VIEW_CLIENT_HOME'], 'src'))
+    sys.path.insert(0, os.path.join(
+        os.environ['ANDROID_VIEW_CLIENT_HOME'], 'src'))
 except:
     pass
 
 from com.dtmilano.android.adb.adbclient import AdbClient
 from com.dtmilano.android.common import obtainAdbPath
 
+
 class main():
+
     def __init__(self):
         self.round = 1
         try:
@@ -27,7 +30,8 @@ class main():
         devices = adbClient.getDevices()
 
         if len(devices) == 0:
-            raise RuntimeError("This tests require at least one device connected. None was found.")
+            raise RuntimeError(
+                "This tests require at least one device connected. None was found.")
         for device in devices:
             if device.status == 'device':
                 sn = device.serialno
@@ -69,7 +73,7 @@ class main():
             if w != False:
                 print("Find demon")
                 self.gotoBattle(w, h)
-  
+
             else:
                 print("Can't find demon", self.retry)
                 # Move to other place
@@ -79,7 +83,7 @@ class main():
                     self.adbClient.touch(400, 1100)
                     if self.retry > 12:
                         self.retry = 0
-                self.retry =  self.retry + 1
+                self.retry = self.retry + 1
                 time.sleep(2)
 
             if not self.isInMap():
@@ -87,7 +91,11 @@ class main():
                 self.inRoom()
 
     def gotoBattle(self, w, h):
+        self.adbClient.touch(w - 200, h)
+        self.adbClient.touch(w - 100, h)
         self.adbClient.touch(w, h)
+        self.adbClient.touch(w + 100, h)
+        self.adbClient.touch(w + 200, h)
 
         time.sleep(3)
         screenshot.screenshot('inRoom.png')
@@ -105,7 +113,7 @@ class main():
             self.adbClient.touch(1300, 840)
             # Animantion
             time.sleep(4)
-            
+
     def isInMap(self):
         screenshot.screenshot('inRoom.png')
         (w, h) = matchImage.matchImage('inRoom.png', 'isInMap.png', 250000000)
